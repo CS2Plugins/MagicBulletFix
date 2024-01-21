@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Numerics;
+using System.Text.Json.Serialization;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
@@ -51,6 +52,7 @@ public class CMagicBulletFix : BasePlugin, IPluginConfig<MagicBulletFixConfig>
         VirtualFunctions.CBaseEntity_TakeDamageOldFunc.Hook(h =>
         {
             var damageInfo = h.GetParam<CTakeDamageInfo>(1);
+            
 
             if (magicBullets.Contains(damageInfo.Attacker.Index) && damageInfo.Attacker.Value != null)
             {
@@ -65,8 +67,8 @@ public class CMagicBulletFix : BasePlugin, IPluginConfig<MagicBulletFixConfig>
                     case FixMethod_t.REFLECT_SAFE:
                         damageInfo.Damage *= Config.ReflectScale;
                         h.SetParam<CEntityInstance>(0, damageInfo.Attacker.Value);
-                        if (Config.FixMethod == FixMethod_t.REFLECT_SAFE && damageInfo.Damage >= damageInfo.Attacker.Value.Health - 1)
-                            damageInfo.Damage = damageInfo.Attacker.Value.Health - 1;
+                        if (Config.FixMethod == FixMethod_t.REFLECT_SAFE)
+                            damageInfo.DamageFlags = (TakeDamageFlags_t)((int)damageInfo.DamageFlags | 8); //https://docs.cssharp.dev/api/CounterStrikeSharp.API.Core.TakeDamageFlags_t.html
                         break;
                 }
 
