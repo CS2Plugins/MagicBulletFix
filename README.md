@@ -1,3 +1,5 @@
+# As of the Arms Race Update Magic Bullet was fixed and therefore this plugin is no longer being updated.
+
 # MagicBulletFix
 CounterStrikeSharp plugin to block magic bullet in CS2
 
